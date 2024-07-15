@@ -1,16 +1,22 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { map, Observable, Subject } from 'rxjs';
+import { Product } from '../interfaces/product.interface';
+import { environment } from '../../../environments/environment';
+import { API_ENDPOINTS } from '../constants/api-endpoints';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class ProductService {
-  private apiUrl = 'https://dummyjson.com/products';
+  private apiUrl = environment.DUMMY_MICROSERVICE;
+  private productsEndpoint = API_ENDPOINTS.PRODUCTS;
 
-  constructor(private http: HttpClient) {}
+	constructor(private http: HttpClient) {}
 
-  getProducts(): Observable<any> {
-    return this.http.get(`${this.apiUrl}?limit=50`);
-  }
+	getProducts(): Observable<Product[]> {
+		return this.http.get<{ products: Product[] }>(`${this.apiUrl}/${this.productsEndpoint}?limit=50`)
+			.pipe(map(response => response.products));
+	}
+	
 }

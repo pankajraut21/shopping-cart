@@ -5,3 +5,9 @@
 .main-content {
     padding: 20px;
 }
+
+app-navigation {
+    display: flex;
+    position: sticky;
+    top: 0;
+}
