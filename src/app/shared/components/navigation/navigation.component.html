@@ -1,0 +1,8 @@
+<nav class="navbar">
+    <div class="nav-left">
+      <a (click)="navigateToShop()" id="shop-label">Shop</a>
+    </div>
+    <div class="nav-right">
+      <a (click)="navigateToCart()" id="cart-label">Cart ({{ cartCount$ | async }})</a>
+    </div>
+</nav>
