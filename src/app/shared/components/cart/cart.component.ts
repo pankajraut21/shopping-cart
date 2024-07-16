@@ -1,43 +1,50 @@
 import { Component, OnInit } from '@angular/core';
 import { CartService } from '../../services/cart.service';
 import { CommonModule } from '@angular/common';
+import { Observable } from 'rxjs';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-cart',
   templateUrl: './cart.component.html',
   styleUrls: ['./cart.component.scss'],
   standalone: true,
-  imports: [CommonModule]
+  imports: [CommonModule, ReactiveFormsModule]
 })
 export class CartComponent implements OnInit {
   cartItems: any[] = [];
-  totalPrice: number = 0;
+  cartForm: FormGroup;
+  
+  totalPrice$ = this.cartService.totalPrice$;
 
-  constructor(private cartService: CartService) {}
-
-  ngOnInit() {
-    this.cartItems = this.cartService.getCart();
-    this.calculateTotalPrice();
+  constructor(private cartService: CartService) {
+    this.cartForm = new FormGroup({});
   }
 
-  updateQuantity(product: any, event: Event) {
-    const quantity = Number((event.target as HTMLInputElement).value); // Convert to number
-    if (quantity <= 0) {
-      this.cartService.removeFromCart(product.id);
-    } else {
-      product.quantity = quantity;
-      this.cartService.updateCart(product);
-    }
-    this.calculateTotalPrice();
+  ngOnInit() {
+    this.loadCart();    
+    this.cartService.cartCount$.subscribe(() => {
+      this.loadCart();
+    });
+  }
+
+  loadCart() {
+    this.cartItems = this.cartService.getCart();
+    this.cartItems.forEach(item => {
+        const control = new FormControl(item.quantity || 0);
+        control.valueChanges.subscribe(() => this.updateQuantity(item));
+        this.cartForm.addControl(item.id.toString(), control);
+    });
+  }
+
+  updateQuantity(product: any) {
+    const quantity = this.cartForm.get(product.id.toString())?.value || 0;
+    product.quantity = quantity;
+    this.cartService.updateCart(product);
   }
 
   removeFromCart(productId: number) {
     this.cartService.removeFromCart(productId);
-    this.cartItems = this.cartService.getCart();
-    this.calculateTotalPrice();
-  }
-
-  calculateTotalPrice() {
-    this.totalPrice = this.cartItems.reduce((acc, product) => acc + product.price * product.quantity, 0);
+    this.loadCart();
   }
 }

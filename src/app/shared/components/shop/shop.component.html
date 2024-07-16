@@ -12,9 +12,11 @@
             />
             <h3>{{ product?.title }}</h3>
             <p>Price: ${{ product?.price }}</p>
-            <p *ngIf="product?.discountPercentage">Discounted!</p>
+            <span *ngIf="product.discountPercentage" class="badge">
+                Discount: {{ product?.discountPercentage }}%
+            </span>
             <p>Rating: {{ product?.rating }}/5</p>
-            <button (click)="addToCart(product)">Add to Cart</button>
+            <button (click)="addToCart(product)" class="add-to-cart">Add to Cart</button>
           </div>
     </ng-container>
     <ng-template #loading>

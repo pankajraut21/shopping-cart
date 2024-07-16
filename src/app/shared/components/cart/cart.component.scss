@@ -1,17 +1,104 @@
-.cart-item {
-    border: 1px solid #ccc;
-    padding: 10px;
-    margin: 10px 0;
+/* General styles */
+.cart-title {
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+    text-align: center;
+  }
+  
+  .empty-cart {
+    font-size: 1.2rem;
+    text-align: center;
+    color: #777;
+  }
+  
+  .cart-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  /* Cart item styles */
+  .cart-item {
     display: flex;
     align-items: center;
-}
+    justify-content: space-between;
+    width: 97%;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s;
+  }
   
-.cart-image {
-    max-width: 100px;
-    margin-right: 10px;
-}
+  .cart-image {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-right: 1rem;
+  }
   
+  .item-details {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  
+  .item-title {
+    font-size: 1.2rem;
+    margin: 0;
+  }
+  
+  .item-price {
+    font-size: 1rem;
+    margin: 0.5rem 0;
+  }
+  
+  .badge {
+    background-color: #6C757D;
+    color: white;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+    display: inline-block;
+    width: 8%;
+  }
+  
+  .item-quantity {
+    display: flex;
+    align-items: center;
+  }
+  
+  .item-quantity input {
+    width: 60px;
+    margin-right: 1rem;
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+  
+  .remove-button {
+    background-color: #1a1818;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  
+  .remove-button:hover {
+    background-color: #130f0f;
+  }
+  
+  /* Total price styles */
   .total-price {
-    margin-top: 20px;
+    margin-top: 2rem;
+    font-size: 1.5rem;
+    text-align: center;
   }
   

@@ -1,7 +1,13 @@
-<!-- <div class="container"> -->
-<div>
-    <app-navigation></app-navigation>
-    <main class="main-content">
-      <router-outlet></router-outlet>
-    </main>
-</div>
+<nav class="navbar">
+    <div class="nav-left">
+      <label (click)="showShop()" id="shop-label">Shop</label>
+    </div>
+    <div class="nav-right">
+      <label (click)="showCart()" id="cart-label">Cart ({{ cartCount$ | async }})</label>
+    </div>
+</nav>
+
+<app-container [view]="view">
+    <app-shop shop></app-shop>
+    <app-cart cart></app-cart>
+</app-container>
