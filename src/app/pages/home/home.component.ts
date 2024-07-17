@@ -2,13 +2,12 @@ import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 
 @Component({
-  selector: 'app-container',
+  selector: 'app-home',
+  templateUrl: './home.component.html',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './container.component.html',
-  styleUrl: './container.component.css'
 })
-export class ContainerComponent {
+export class HomeComponent {
   @Input() view: string = 'shop';
 
   showShop() {

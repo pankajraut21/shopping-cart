@@ -1,15 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { CartService } from '../../services/cart.service';
 import { CommonModule } from '@angular/common';
-import { Observable } from 'rxjs';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { CartService } from '../../../../core/services/cart.service';
+import { IntegerOnlyDirective } from '../../directives/integer-only.directive';
 
 @Component({
   selector: 'app-cart',
   templateUrl: './cart.component.html',
   styleUrls: ['./cart.component.scss'],
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule]
+  imports: [CommonModule, ReactiveFormsModule, IntegerOnlyDirective]
 })
 export class CartComponent implements OnInit {
   cartItems: any[] = [];
@@ -31,9 +31,13 @@ export class CartComponent implements OnInit {
   loadCart() {
     this.cartItems = this.cartService.getCart();
     this.cartItems.forEach(item => {
+      if (!this.cartForm.contains(item.id.toString())) {
         const control = new FormControl(item.quantity || 0);
         control.valueChanges.subscribe(() => this.updateQuantity(item));
         this.cartForm.addControl(item.id.toString(), control);
+      } else {
+        this.cartForm.get(item.id.toString())?.setValue(item.quantity, { emitEvent: false });
+      }
     });
   }
 

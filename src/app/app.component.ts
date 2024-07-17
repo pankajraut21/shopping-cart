@@ -1,34 +1,33 @@
 import { Component } from '@angular/core';
-import { ShopComponent } from './shared/components/shop/shop.component';
-import { CartComponent } from './shared/components/cart/cart.component';
-import { CartService } from './shared/services/cart.service';
 import { CommonModule } from '@angular/common';
-import { ContainerComponent } from './container/container.component';
+import { ShopComponent } from './features/product/components/shop/shop.component';
+import { CartComponent } from './features/cart/components/cart/cart.component';
+import { CartService } from './core/services/cart.service';
+import { HomeComponent } from './pages/home/home.component';
 
 @Component({
-  selector: 'app-root',
+  selector: 'app-shopping-cart',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
   standalone: true,
   imports: [
     CommonModule,
-    ContainerComponent,
+    HomeComponent,
     ShopComponent,
     CartComponent
   ],
 })
 export class AppComponent {
+    view: 'shop' | 'cart' = 'shop';
     cartCount$ = this.cartService.cartCount$;
 
     constructor(private cartService: CartService) {}
   
-    view: 'shop' | 'cart' = 'shop';
-
-    showShop() {
+    displayShop() {
         this.view = 'shop';
     }
     
-    showCart() {
+    displayCart() {
         this.view = 'cart';
     }
 }

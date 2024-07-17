@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { map, Observable, Subject } from 'rxjs';
-import { Product } from '../interfaces/product.interface';
-import { environment } from '../../../environments/environment';
+import { map, Observable } from 'rxjs';
+
 import { API_ENDPOINTS } from '../constants/api-endpoints';
+import { environment } from '../../../environments/environment';
+import { Product } from '../interfaces/product.interface';
 
 @Injectable({
   providedIn: 'root'

@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule, NgOptimizedImage } from '@angular/common';
-import { ProductService } from '../../services/product.service';
-import { CartService } from '../../services/cart.service';
+import { ProductService } from '../../../../core/services/product.service';
+import { CartService } from '../../../../core/services/cart.service';
 import { Observable } from 'rxjs';
-import { Product } from '../../interfaces/product.interface';
+import { Product } from '../../../../core/interfaces/product.interface';
 
 @Component({
   selector: 'app-shop',
