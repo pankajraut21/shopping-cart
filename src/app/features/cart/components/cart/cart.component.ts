@@ -1,8 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { CartService } from '../../../../core/services/cart.service';
 import { IntegerOnlyDirective } from '../../directives/integer-only.directive';
+import { Subscription } from 'rxjs';
+import { CartItem } from '../../../../core/models/cart-item.interface';
 
 @Component({
   selector: 'app-cart',
@@ -11,28 +13,34 @@ import { IntegerOnlyDirective } from '../../directives/integer-only.directive';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, IntegerOnlyDirective]
 })
-export class CartComponent implements OnInit {
-  cartItems: any[] = [];
+export class CartComponent implements OnInit, OnDestroy {
+  cartItems: CartItem[] = [];
   cartForm: FormGroup;
-  
   totalPrice$ = this.cartService.totalPrice$;
 
-  constructor(private cartService: CartService) {
-    this.cartForm = new FormGroup({});
+  private subscriptions: Subscription = new Subscription();
+
+  constructor(private cartService: CartService, private formBuilder: FormBuilder) {
+    this.cartForm = this.formBuilder.group({});
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.loadCart();    
-    this.cartService.cartCount$.subscribe(() => {
+    const cartCountSubscription = this.cartService.cartCount$.subscribe(() => {
       this.loadCart();
     });
+    this.subscriptions.add(cartCountSubscription);
   }
 
-  loadCart() {
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
+  }
+
+  loadCart(): void {
     this.cartItems = this.cartService.getCart();
-    this.cartItems.forEach(item => {
+    this.cartItems?.forEach(item => {
       if (!this.cartForm.contains(item.id.toString())) {
-        const control = new FormControl(item.quantity || 0);
+        const control = this.formBuilder.control(item.quantity || 0);
         control.valueChanges.subscribe(() => this.updateQuantity(item));
         this.cartForm.addControl(item.id.toString(), control);
       } else {
@@ -41,13 +49,15 @@ export class CartComponent implements OnInit {
     });
   }
 
-  updateQuantity(product: any) {
-    const quantity = this.cartForm.get(product.id.toString())?.value || 0;
-    product.quantity = quantity;
-    this.cartService.updateCart(product);
+  updateQuantity(item: CartItem): void {
+    const quantity = this.cartForm.get(item.id.toString())?.value || 0;
+    if (quantity !== item.quantity) {
+      item.quantity = quantity;
+      this.cartService.updateCart(item);
+    }
   }
 
-  removeFromCart(productId: number) {
+  removeFromCart(productId: number): void {
     this.cartService.removeFromCart(productId);
     this.loadCart();
   }

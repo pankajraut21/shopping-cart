@@ -1,27 +1,32 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule, NgOptimizedImage } from '@angular/common';
+import { CommonModule } from '@angular/common';
+import { Observable } from 'rxjs';
+
 import { ProductService } from '../../../../core/services/product.service';
 import { CartService } from '../../../../core/services/cart.service';
-import { Observable } from 'rxjs';
-import { Product } from '../../../../core/interfaces/product.interface';
+import { Product } from '../../../../core/models/product.interface';
 
 @Component({
   selector: 'app-shop',
   templateUrl: './shop.component.html',
   styleUrls: ['./shop.component.scss'],
   standalone: true,
-  imports: [CommonModule, NgOptimizedImage],
+  imports: [CommonModule]
 })
 export class ShopComponent implements OnInit {
   products$: Observable<Product[]> | undefined;
 
   constructor(private productService: ProductService, private cartService: CartService) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.products$ = this.productService.getProducts();
   }
 
-  addToCart(product: any) {
+  addToCart(product: Product): void {
     this.cartService.addToCart(product);
+  }
+
+  trackByFn(_index: number, item: Product): number {
+    return item.id;
   }
 }

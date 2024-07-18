@@ -4,6 +4,7 @@ import { ShopComponent } from './features/product/components/shop/shop.component
 import { CartComponent } from './features/cart/components/cart/cart.component';
 import { CartService } from './core/services/cart.service';
 import { HomeComponent } from './pages/home/home.component';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-shopping-cart',
@@ -19,15 +20,17 @@ import { HomeComponent } from './pages/home/home.component';
 })
 export class AppComponent {
     view: 'shop' | 'cart' = 'shop';
-    cartCount$ = this.cartService.cartCount$;
+    cartCount$: Observable<number>;
 
-    constructor(private cartService: CartService) {}
-  
-    displayShop() {
+    constructor(private cartService: CartService) {
+      this.cartCount$ = this.cartService.cartCount$;
+    }
+
+    displayShop(): void {
         this.view = 'shop';
     }
     
-    displayCart() {
+    displayCart(): void {
         this.view = 'cart';
     }
 }
